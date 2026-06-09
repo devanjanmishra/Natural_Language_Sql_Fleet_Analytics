@@ -1,4 +1,4 @@
-# Fleet Insight — AI-Augmented SQL Analytics
+# Fleet Insight — AI-Augmented SQL Analytics from Natural Language
 
 > Ask questions in plain English, clean up messy categorical data with a local LLM, and query or visualize the result — over a SQL warehouse, with a hard read-only safety gate.
 
@@ -224,5 +224,3 @@ python scripts/query_canonical.py --csv your_data_clean.csv --sql "SELECT ..."
 - The included data is **synthetic** and generated deterministically (`scripts/generate_data.py`).
 
 ---
-
-<sub>Built with an AI-augmented workflow (Windsurf, Claude). Local LLM inference via Ollama.</sub>
