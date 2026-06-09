@@ -1,0 +1,95 @@
+<svg viewBox="0 0 920 470" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2E75B6"/>
+    </marker>
+    <style>
+      .box{fill:#fff;stroke:#2E75B6;stroke-width:1.5;rx:10;}
+      .lbl{font-size:13px;font-weight:600;fill:#1F4E79;}
+      .sub{font-size:10.5px;fill:#555;}
+      .flow{stroke:#2E75B6;stroke-width:1.6;fill:none;marker-end:url(#arr);}
+      .grp{fill:#F4F8FC;stroke:#D6E4F0;stroke-width:1;rx:12;}
+      .gl{font-size:11px;font-weight:700;fill:#2E75B6;letter-spacing:.04em;}
+      .gate{fill:#FCEBEB;stroke:#A32D2D;stroke-width:1.5;rx:10;}
+      .gatelbl{font-size:13px;font-weight:600;fill:#A32D2D;}
+    </style>
+  </defs>
+
+  <text x="20" y="28" font-size="18" font-weight="700" fill="#1F4E79">Fleet Insight — Architecture</text>
+  <text x="20" y="46" font-size="12" fill="#555">Natural-language &amp; offline analytics over a SQL warehouse, with a local LLM and a hard read-only safety gate.</text>
+
+  <!-- User -->
+  <rect class="box" x="20" y="90" width="150" height="64" rx="10"/>
+  <text class="lbl" x="95" y="116" text-anchor="middle">User / Stakeholder</text>
+  <text class="sub" x="95" y="134" text-anchor="middle">asks in plain English</text>
+
+  <!-- FastAPI -->
+  <rect class="box" x="210" y="80" width="170" height="84" rx="10"/>
+  <text class="lbl" x="295" y="108" text-anchor="middle">FastAPI service</text>
+  <text class="sub" x="295" y="126" text-anchor="middle">/ask  /query  /schema</text>
+  <text class="sub" x="295" y="142" text-anchor="middle">/canonicalize/*</text>
+
+  <!-- Ollama group -->
+  <rect class="grp" x="430" y="60" width="230" height="180"/>
+  <text class="gl" x="445" y="80">LOCAL LLM (OLLAMA)</text>
+  <rect class="box" x="445" y="92" width="200" height="40" rx="8"/>
+  <text class="sub" x="545" y="116" text-anchor="middle">1 · generate SQL (schema-grounded)</text>
+  <rect class="box" x="445" y="138" width="200" height="40" rx="8"/>
+  <text class="sub" x="545" y="162" text-anchor="middle">2 · self-validate the SQL</text>
+  <rect class="box" x="445" y="184" width="200" height="40" rx="8"/>
+  <text class="sub" x="545" y="208" text-anchor="middle">3 · summarize results in NL</text>
+
+  <!-- Safety gate -->
+  <rect class="gate" x="210" y="210" width="170" height="60" rx="10"/>
+  <text class="gatelbl" x="295" y="234" text-anchor="middle">Safety gate</text>
+  <text class="sub" x="295" y="252" text-anchor="middle">read-only · no stacked SQL</text>
+
+  <!-- MySQL -->
+  <rect class="box" x="710" y="100" width="180" height="74" rx="10"/>
+  <text class="lbl" x="800" y="128" text-anchor="middle">MySQL warehouse</text>
+  <text class="sub" x="800" y="146" text-anchor="middle">dim_vehicle · fact_telemetry</text>
+  <text class="sub" x="800" y="162" text-anchor="middle">maintenance_log</text>
+
+  <!-- Milvus optional -->
+  <rect class="box" x="710" y="196" width="180" height="56" rx="10" stroke-dasharray="5 4"/>
+  <text class="lbl" x="800" y="220" text-anchor="middle">Milvus (optional)</text>
+  <text class="sub" x="800" y="238" text-anchor="middle">semantic note search</text>
+
+  <!-- Offline branch -->
+  <rect class="grp" x="20" y="300" width="870" height="140"/>
+  <text class="gl" x="35" y="322">OFFLINE FILE-BASED FLOW  (no server required)</text>
+
+  <rect class="box" x="40" y="338" width="170" height="74" rx="10"/>
+  <text class="lbl" x="125" y="362" text-anchor="middle">raw CSV</text>
+  <text class="sub" x="125" y="380" text-anchor="middle">messy values</text>
+  <text class="sub" x="125" y="396" text-anchor="middle">(fleet_raw.csv)</text>
+
+  <rect class="box" x="270" y="338" width="190" height="74" rx="10"/>
+  <text class="lbl" x="365" y="358" text-anchor="middle">canonicalize_csv.py</text>
+  <text class="sub" x="365" y="376" text-anchor="middle">LLM map → target vocab</text>
+  <text class="sub" x="365" y="392" text-anchor="middle">offline fuzzy fallback</text>
+
+  <rect class="box" x="520" y="338" width="170" height="74" rx="10"/>
+  <text class="lbl" x="605" y="362" text-anchor="middle">canonical CSV</text>
+  <text class="sub" x="605" y="380" text-anchor="middle">clean columns added</text>
+
+  <rect class="box" x="730" y="338" width="140" height="74" rx="10"/>
+  <text class="lbl" x="800" y="358" text-anchor="middle">DuckDB SQL</text>
+  <text class="sub" x="800" y="376" text-anchor="middle">+ Streamlit</text>
+  <text class="sub" x="800" y="392" text-anchor="middle">dashboard</text>
+
+  <!-- flows top -->
+  <path class="flow" d="M170,122 L206,122"/>
+  <path class="flow" d="M380,108 L441,108"/>
+  <!-- FastAPI -> safety gate -->
+  <path class="flow" d="M295,164 L295,206"/>
+  <!-- safety gate -> MySQL -->
+  <path class="flow" d="M380,240 L520,240 L520,150 L706,142"/>
+  <!-- MySQL -> Milvus (optional) -->
+  <path class="flow" d="M800,174 L800,192" stroke-dasharray="5 4"/>
+
+  <!-- flows offline -->
+  <path class="flow" d="M210,375 L266,375"/>
+  <path class="flow" d="M460,375 L516,375"/>
+  <path class="flow" d="M690,375 L726,375"/>
+</svg>

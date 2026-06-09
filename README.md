@@ -84,7 +84,13 @@ pip install -r requirements-analytics.txt
 streamlit run scripts/dashboard.py
 ```
 
-![Dashboard preview](assets/dashboard_preview.png)
+A filterable Streamlit dashboard over the canonicalized data — KPIs, composition by model, fault rate by fuel type, and regional breakdown:
+
+![Dashboard](assets/dashboard_main.png)
+
+The detail view shows the canonical columns sitting alongside the original messy ones, so the normalization is fully transparent:
+
+![Dashboard — region view and detail](assets/dashboard_region.png)
 
 ---
 
