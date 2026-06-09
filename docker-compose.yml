@@ -1,4 +1,31 @@
 services:
+  # --- FastAPI application ---
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      MYSQL_HOST: mysql          # reach the db by compose service name
+      MYSQL_PORT: 3306
+      MYSQL_USER: fleet
+      MYSQL_PASSWORD: fleetpass
+      MYSQL_DB: fleet_insight
+      # Ollama runs natively on the HOST, not in a container.
+      # host.docker.internal resolves to the host from inside the container.
+      OLLAMA_HOST: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5-coder:7b
+      EMBED_MODEL: nomic-embed-text
+      ENABLE_SEMANTIC: "false"
+      MILVUS_HOST: milvus
+      MILVUS_PORT: "19530"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    extra_hosts:
+      # Required on Linux for host.docker.internal to work (no-op on Docker Desktop)
+      - "host.docker.internal:host-gateway"
+
+  # --- MySQL warehouse ---
   mysql:
     image: mysql:8.4
     environment:
@@ -10,8 +37,13 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  # Optional — only needed for the semantic-search module (ENABLE_SEMANTIC=true)
+  # --- Milvus (optional) — only starts with: docker compose --profile semantic up ---
   milvus:
     image: milvusdb/milvus:v2.4.9
     command: ["milvus", "run", "standalone"]

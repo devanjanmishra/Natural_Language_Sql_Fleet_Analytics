@@ -1,5 +1,11 @@
 __pycache__/
 *.pyc
 .env
-data/*.csv
 .venv/
+
+# Ignore generated warehouse CSVs, but keep the committed sample data
+/data/*.csv
+!/data/sample/
+data/sample/*.csv
+!data/sample/fleet_raw.csv
+!data/sample/fleet_canonical.csv
